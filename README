@@ -1,0 +1,23 @@
+Executable HOWTO
+----------------
+usage: renderer.py [-h] [-s] [-b] [--bdist INT] [--path PATH] source output
+
+Render a pixel map.
+
+positional arguments:
+  source       Pixel map.
+  output       Rendered map.
+
+optional arguments:
+  -h, --help   show this help message and exit
+  -s           Disable shadows.
+  -b           Disable background.
+  --bdist INT  Background distance from bottom.
+  --path PATH  Path to KAG installation. (no trailing slash)
+
+Module Info
+-----------
+The module's quite dependent on the CLI interface for the time being, so I do not recommend its use as such.
+
+
+*NOTE*: Sprite files are included with this package because the game's constant updates break the sprite sheets. They belong to Michal Marcinkowski <mm.soldat.pl> and Max 'Geti' Cahil <http://www.1bardesign.com/>.
