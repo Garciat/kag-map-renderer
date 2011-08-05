@@ -1,19 +1,26 @@
 Executable HOWTO
 ----------------
-usage: renderer.py [-h] [-s] [-b] [--bdelta X] [--path PATH] source output
+usage: renderer.py [-h] [-s] [-b] [-bdelta X] [-path PATH] [-f FORMAT] [-o PATH] source
 
-Render a pixel map.
+Render a blueprint map for the game King Arthurs Gold.
 
 positional arguments:
-  source       Pixel map.
-  output       Rendered map.
+  source                Pixel map.
 
 optional arguments:
-  -h, --help   show this help message and exit
-  -s           Disable shadow layer.
-  -b           Disable background layer.
-  --bdelta X   Shift the background layer X pixels. up=-X; down=+X
-  --path PATH  Path to KAG installation. (no trailing slash)
+  -h, --help            show this help message and exit
+  -s                    Disable shadow layer.
+  -b                    Disable background layer.
+  -bdelta X, --bdelta X
+                        Shift the background layer X pixels. up=-X; down=+X.
+                        Default: 0
+  -path PATH, --path PATH
+                        Path to KAG installation. (no trailing slash).
+                        Default: .
+  -f FORMAT, --f FORMAT
+                        Format for the rendered map (JPEG, PNG).
+                        Default: PNG
+  -o PATH, --o PATH     Path to save rendered map at.
 
 
 Module Info

@@ -144,9 +144,11 @@ class BlockMap(object):
 		
 		self.all = BlockSet(self.size)
 		self.by_type = {}
+		self.empty = BlockSet(self.size)
 	
 	def __getitem__(self, key):
 		if type(key) is str:
+			if key not in self.by_type: return self.empty
 			return self.by_type[key]
 		pos = key
 		if pos[0] < 0 or pos[0] >= self.w or pos[1] < 0 or pos[1] >= self.h:
@@ -386,6 +388,16 @@ class Renderer(object):
 				
 				self.output.paste(draw_block, pos, draw_block)
 		
+		# spawn points
+		blue = Image.open(SPRITE_PATH % '/tent1.png').convert('RGBA').transform((32, 32), Image.EXTENT, (0, 0, 32, 32))
+		red = Image.open(SPRITE_PATH % '/tent2.png').convert('RGBA').transform((32, 32), Image.EXTENT, (0, 0, 32, 32))
+		for block in self.map['blue_spawn'].get_all():
+			pos = tuple([n*BLOCK_SIZE for n in block.pos])
+			self.output.paste(blue, (pos[0]-16, pos[1]-16), blue)
+		for block in self.map['red_spawn'].get_all():
+			pos = tuple([n*BLOCK_SIZE for n in block.pos])
+			self.output.paste(red, (pos[0]-16, pos[1]-16), red)
+		
 		return self.output
 
 # ---
@@ -394,21 +406,25 @@ if __name__ == '__main__':
 	import argparse
 	
 	# Args
-	parser = argparse.ArgumentParser(description='Render a pixel map.')
+	parser = argparse.ArgumentParser(description='Render a blueprint map for the game King Arthurs Gold.')
 	
 	parser.add_argument('-s', help='Disable shadow layer.', action='store_false', default=True)
 	parser.add_argument('-b', help='Disable background layer.', action='store_false', default=True)
-	parser.add_argument('--bdelta', help='Shift the background layer X pixels. up=-X; down=+X', metavar='X', type=int, default=0)
-	parser.add_argument('--path', help='Path to KAG installation. (no trailing slash)', metavar='PATH', type=str, default='.')
+	parser.add_argument('-bdelta', '--bdelta', help='Shift the background layer X pixels. up=-X; down=+X. Default: 0', metavar='X', type=int, default=0)
+	parser.add_argument('-path', '--path', help='Path to KAG installation. (no trailing slash). Default: .', metavar='PATH', type=str, default='.')
+	parser.add_argument('-f', '--f', help='Format for the rendered map (JPEG, PNG). Default: PNG', metavar='FORMAT', default='PNG')
+	parser.add_argument('-o', '--o', help='Path to save rendered map at.', metavar='PATH', default=None)
 	
 	parser.add_argument('source', help='Pixel map.')
-	parser.add_argument('output', help='Rendered map.')
 	
 	args = parser.parse_args()
 	# ---
 	
 	SPRITE_PATH = os.path.abspath(args.path) + SPRITE_PATH
-	SCRIPT_PATH = os.path.abspath(os.path.dirname(__file__)) + '%s'
+	SCRIPT_PATH = os.path.dirname(os.path.abspath(__file__)) + '%s'
+	
+	if args.o is None:
+		args.o = os.path.abspath(args.source) + '.out'
 	
 	if not os.path.exists(SPRITE_PATH % ''):
 		print 'ERROR: Invalid PATH to KAG installation.'
@@ -420,9 +436,10 @@ if __name__ == '__main__':
 	
 	Block.load_cache()
 	
-	Renderer(args.source).process().render(shadows=args.s, background=args.b, bdelta=args.bdelta).save(args.output)
+	Renderer(args.source).process().render(shadows=args.s, background=args.b, bdelta=args.bdelta).save(args.o, args.f)
 	
 	print time.time() - start
+	print args.o
 
 # ---
 # END

@@ -32,7 +32,7 @@
 	{
 		"blocks": [[0, 0]],
 		"colors": [[0, 255, 255]],
-		"type": "prop",
+		"type": "blue_spawn",
 		"name": "blue_spawn"
 	},
 	{
@@ -140,7 +140,7 @@
 	{
 		"blocks": [[0, 0]],
 		"colors": [[255, 0, 0]],
-		"type": "prop",
+		"type": "red_spawn",
 		"name": "red_spawn"
 	},
 	{
