@@ -1,6 +1,6 @@
 Executable HOWTO
 ----------------
-usage: renderer.py [-h] [-s] [-b] [--bdist INT] [--path PATH] source output
+usage: renderer.py [-h] [-s] [-b] [--bdelta X] [--path PATH] source output
 
 Render a pixel map.
 
@@ -10,10 +10,11 @@ positional arguments:
 
 optional arguments:
   -h, --help   show this help message and exit
-  -s           Disable shadows.
-  -b           Disable background.
-  --bdist INT  Background distance from bottom.
+  -s           Disable shadow layer.
+  -b           Disable background layer.
+  --bdelta X   Shift the background layer X pixels. up=-X; down=+X
   --path PATH  Path to KAG installation. (no trailing slash)
+
 
 Module Info
 -----------
