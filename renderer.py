@@ -398,7 +398,7 @@ if __name__ == '__main__':
 	
 	parser.add_argument('-s', help='Disable shadow layer.', action='store_false', default=True)
 	parser.add_argument('-b', help='Disable background layer.', action='store_false', default=True)
-	parser.add_argument('--bdelta', help='Shift the background layer X pixels. up=-X; down=+X', metavar='X', type=int, default=None)
+	parser.add_argument('--bdelta', help='Shift the background layer X pixels. up=-X; down=+X', metavar='X', type=int, default=0)
 	parser.add_argument('--path', help='Path to KAG installation. (no trailing slash)', metavar='PATH', type=str, default='.')
 	
 	parser.add_argument('source', help='Pixel map.')
