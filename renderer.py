@@ -187,14 +187,13 @@ class Renderer(object):
 		
 		return self
 	
-	def render(self, shadows=True, background=True, background_y=None):
+	def render(self, shadows=True, background=True, bdelta=0):
 		if background:
 			# background gradient
 			bg = Image.open(SCRIPT_PATH % '/bg_gradient.png').convert('RGBA').resize(self.output.size)
 			self.output.paste(bg, (0, 0, self.output.size[0], self.output.size[1]))
 		
-			if background_y is None:
-				background_y = self.output.size[1]/2 + 70
+			background_y = self.output.size[1]/2 + 70 + bdelta
 		
 			# plains
 			im = Image.open(SPRITE_PATH % '/Back/BackgroundPlains.png').convert('RGBA')
@@ -397,9 +396,9 @@ if __name__ == '__main__':
 	# Args
 	parser = argparse.ArgumentParser(description='Render a pixel map.')
 	
-	parser.add_argument('-s', help='Disable shadows.', action='store_false', default=True)
-	parser.add_argument('-b', help='Disable background.', action='store_false', default=True)
-	parser.add_argument('--bdist', help='Background distance from bottom.', metavar='INT', type=int, default=None)
+	parser.add_argument('-s', help='Disable shadow layer.', action='store_false', default=True)
+	parser.add_argument('-b', help='Disable background layer.', action='store_false', default=True)
+	parser.add_argument('--bdelta', help='Shift the background layer X pixels. up=-X; down=+X', metavar='X', type=int, default=None)
 	parser.add_argument('--path', help='Path to KAG installation. (no trailing slash)', metavar='PATH', type=str, default='.')
 	
 	parser.add_argument('source', help='Pixel map.')
@@ -421,7 +420,7 @@ if __name__ == '__main__':
 	
 	Block.load_cache()
 	
-	Renderer(args.source).process().render(shadows=args.s, background=args.b, background_y=args.bdist).save(args.output)
+	Renderer(args.source).process().render(shadows=args.s, background=args.b, bdelta=args.bdelta).save(args.output)
 	
 	print time.time() - start
 
