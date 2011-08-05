@@ -20,7 +20,7 @@ optional arguments:
   -f FORMAT, --f FORMAT
                         Format for the rendered map (JPEG, PNG).
                         Default: PNG
-  -o PATH, --o PATH     Path to save rendered map at.
+  -o PATH, --o PATH     Path to save rendered map at. Default: source + ".out"
 
 
 Module Info

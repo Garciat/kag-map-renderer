@@ -413,7 +413,7 @@ if __name__ == '__main__':
 	parser.add_argument('-bdelta', '--bdelta', help='Shift the background layer X pixels. up=-X; down=+X. Default: 0', metavar='X', type=int, default=0)
 	parser.add_argument('-path', '--path', help='Path to KAG installation. (no trailing slash). Default: .', metavar='PATH', type=str, default='.')
 	parser.add_argument('-f', '--f', help='Format for the rendered map (JPEG, PNG). Default: PNG', metavar='FORMAT', default='PNG')
-	parser.add_argument('-o', '--o', help='Path to save rendered map at.', metavar='PATH', default=None)
+	parser.add_argument('-o', '--o', help='Path to save rendered map at. Default: source + ".out"', metavar='PATH', default=None)
 	
 	parser.add_argument('source', help='Pixel map.')
 	
