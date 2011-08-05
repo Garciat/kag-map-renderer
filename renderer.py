@@ -303,45 +303,6 @@ class Renderer(object):
 			
 			self.output.paste(detail, tuple([n*BLOCK_SIZE for n in block.pos]), a)
 		
-		# solid blocks
-		for block in self.map['solid'].get_all():
-			draw_block = block.image
-			borders = block.get_borders()
-			
-			if block.name == 'castle':
-				if borders[1].name == 'castle_wall':
-					draw_block = Block.cache.by_name('castle_floor')[2]
-				elif borders[5].name == 'castle_wall':
-					draw_block = Block.cache.by_name('castle_roof')[2]
-				elif borders[5].name.endswith('door'):
-					draw_block = Block.cache.by_name('castle_door')[2]
-			
-			# fog
-			if shadows:
-				if block.is_hidden():
-					draw_block = shadow
-				else:
-					if borders[1].is_hidden():
-						draw_block = mix(draw_block, gradient_b)
-					if borders[3].is_hidden():
-						draw_block = mix(draw_block, gradient_l)
-					if borders[5].is_hidden():
-						draw_block = mix(draw_block, gradient_t)
-					if borders[7].is_hidden():
-						draw_block = mix(draw_block, gradient_r)
-			
-			self.output.paste(draw_block, tuple([n*BLOCK_SIZE for n in block.pos]), block.image)
-			
-			# background depth
-			depth = {'gradient_t':1, 'gradient_r':3, 'gradient_b':5, 'gradient_l':7}
-			for name, side in depth.iteritems():
-				if borders[side].type != 'background' or borders[side].name == 'spikes':
-					continue
-				draw_block = locals()[name]
-				r,g,b,a = draw_block.split()
-				detail = Image.merge('RGB', (r,g,b))
-				self.output.paste(detail, tuple([n*BLOCK_SIZE for n in borders[side].pos]), a)
-		
 		# trees
 		im = Image.open(SPRITE_PATH % '/Trees/pine.png').convert('RGBA')
 		treetops = []
@@ -397,6 +358,53 @@ class Renderer(object):
 		for block in self.map['red_spawn'].get_all():
 			pos = tuple([n*BLOCK_SIZE for n in block.pos])
 			self.output.paste(red, (pos[0]-16, pos[1]-16), red)
+		
+		# solid blocks
+		for block in self.map['solid'].get_all():
+			pos = tuple([n*BLOCK_SIZE for n in block.pos])
+			draw_block = block.image
+			borders = block.get_borders()
+			
+			if block.name == 'castle':
+				if borders[1].name == 'castle_wall':
+					draw_block = Block.cache.by_name('castle_floor')[2]
+				elif borders[5].name == 'castle_wall':
+					draw_block = Block.cache.by_name('castle_roof')[2]
+				elif borders[5].name.endswith('door'):
+					draw_block = Block.cache.by_name('castle_door')[2]
+			
+			if block.name == 'dirt':
+				if borders[1].name == 'empty' or borders[1].name == 'tree':
+					draw_block = Block.cache.by_name('grass')[2]
+					# grass leaves
+					grass = Block.cache.by_name('grass_top')[2]
+					self.output.paste(grass, (pos[0], pos[1]-BLOCK_SIZE), grass)
+			
+			# fog
+			if shadows:
+				if block.is_hidden():
+					draw_block = shadow
+				else:
+					if borders[1].is_hidden():
+						draw_block = mix(draw_block, gradient_b)
+					if borders[3].is_hidden():
+						draw_block = mix(draw_block, gradient_l)
+					if borders[5].is_hidden():
+						draw_block = mix(draw_block, gradient_t)
+					if borders[7].is_hidden():
+						draw_block = mix(draw_block, gradient_r)
+			
+			self.output.paste(draw_block, pos, block.image)
+			
+			# background depth
+			depth = {'gradient_t':1, 'gradient_r':3, 'gradient_b':5, 'gradient_l':7}
+			for name, side in depth.iteritems():
+				if borders[side].type != 'background' or borders[side].name == 'spikes':
+					continue
+				draw_block = locals()[name]
+				r,g,b,a = draw_block.split()
+				detail = Image.merge('RGB', (r,g,b))
+				self.output.paste(detail, tuple([n*BLOCK_SIZE for n in borders[side].pos]), a)
 		
 		return self.output
 
